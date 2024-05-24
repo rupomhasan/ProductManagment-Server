@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import { TOrder } from "./order.interface";
+import { string } from "zod";
 
 export const orderSchema = new Schema({
     email: {
@@ -27,11 +28,12 @@ export const orderSchema = new Schema({
         required: true,
         trim: true
     },
-    dateTime: {
-        type: Date,
-        required: true,
-        default: Date.now
+    date: {
+        type: String,
     }
 });
+
+
+
 
 export const Order = mongoose.model<TOrder & Document>('Order', orderSchema);

@@ -6,5 +6,11 @@ export type TOrder = {
     price: number;
     quantity: number;
     address: string;
-    dateTime?: string
+    date?: string
+}
+
+export type TParam = {
+    productId: string;
+    quantity: number;
+    inStock: boolean
 }
