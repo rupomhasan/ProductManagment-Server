@@ -43,7 +43,7 @@ const createOrder = async (req: Request, res: Response) => {
             quantity: order.quantity,
             address: order.address,
             date: format(new Date(), 'dd-MM-yyyy hh:mm a')
-            
+
 
         }
 
@@ -84,7 +84,30 @@ const createOrder = async (req: Request, res: Response) => {
     }
 }
 
+const getAllOrders = async (req: Request, res: Response) => {
+
+    try {
+
+        const result = await OrderService.getAllOrders()
+
+        res.status(500).json({
+            success: true,
+            "message": "order fetched successfully",
+            data: result
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Something went wrong",
+            error
+        })
+    }
+
+
+}
 
 export const OrderController = {
-    createOrder
+    createOrder,
+    getAllOrders
 }
