@@ -20,15 +20,12 @@ const productSchema = new Schema<TProduct>({
   tags: { type: [String], required: true },
   variants: { type: [variantsSchema], required: true },
   inventory: { type: inventorySchema, required: true },
-  slug: { type: String }
-})
+  slug: { type: String },
+});
 
 productSchema.pre('save', async function (next) {
-  this.slug = slugify(this.name, { lower: true })
-  next
-
-})
-
-
+  this.slug = slugify(this.name, { lower: true });
+  next;
+});
 
 export const Product = mongoose.model<TProduct>('Product', productSchema);

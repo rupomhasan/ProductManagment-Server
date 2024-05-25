@@ -9,7 +9,7 @@ export default [
   {
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
-      globals: globals.browser,
+      globals: { ...globals.browser, ...globals.node },
       parser: tsParser,
       parserOptions: {
         ecmaVersion: 2020,
@@ -24,7 +24,7 @@ export default [
       ...jsConfigs.configs.recommended.rules,
       ...tsConfigs.configs.recommended.rules,
       ...prettierConfig.rules,
-      'no-unused-vars': 'error',
+      '@typescript-eslint/no-unused-vars': 'error',
       'no-undef': 'error',
       'prefer-const': 'error',
       'no-console': 'warn',

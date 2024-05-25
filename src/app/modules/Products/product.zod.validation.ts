@@ -19,5 +19,5 @@ export const productValidationSchema = z.object({
   tags: z.array(z.string()),
   variants: z.array(variantsValidationSchema),
   inventory: inventoryValidationSchema,
-  slug: z.string().optional()
+  slug: z.string().optional(),
 });
