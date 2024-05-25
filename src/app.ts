@@ -18,4 +18,15 @@ app.get('/', (req: Request, res: Response) => {
   res.send('hello');
 });
 
+
+app.use((req: Request, res: Response, next) => {
+
+  res.json({
+    success: false,
+    message: "Route not found"
+  })
+  next
+})
+
+
 export default app;
