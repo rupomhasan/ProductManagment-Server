@@ -21,9 +21,14 @@ const getAllOrders = async () => {
     return await Order.find({})
 }
 
+const getOrdersByEmail = async (email: string) => {
+    return await Order.find({email })
+}
+
 
 export const OrderService = {
     updateProductAfterOrder,
+    getOrdersByEmail,
     getAllOrders,
     createOrder
 } 

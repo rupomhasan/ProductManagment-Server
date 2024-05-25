@@ -1,7 +1,6 @@
 import { format } from "date-fns"
 import { productServices } from "../Products/product.servic"
 import { orderValidationSchema } from "./order.Zod.Validatin"
-import { Order } from "./order.model"
 import { OrderService } from "./order.services"
 import { Request, Response } from "express"
 
@@ -88,13 +87,50 @@ const getAllOrders = async (req: Request, res: Response) => {
 
     try {
 
-        const result = await OrderService.getAllOrders()
 
-        res.status(500).json({
-            success: true,
-            "message": "order fetched successfully",
-            data: result
-        })
+        if (typeof req.query.email === 'string') {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const email = req.query.email
+            if (emailRegex.test(email)) {
+
+                const order = await OrderService.getOrdersByEmail(email)
+
+                if (order.length === 0) {
+                    res.status(404).json({
+                        success: false,
+                        message: "No order found of this email"
+                    })
+                }
+                else {
+                    res.status(200).json({
+                        success: true,
+                        message: "Order fetched successfully for use email",
+                        data: order
+                    })
+                }
+
+            }
+
+            else {
+                res.json({
+                    success: false,
+                    message: 'is not a valid Email'
+                })
+            }
+
+
+        }
+
+        else {
+            const result = await OrderService.getAllOrders()
+            res.status(500).json({
+                success: true,
+                "message": "order fetched successfully",
+                data: result
+            })
+        }
+
+
 
     } catch (error) {
         res.status(500).json({

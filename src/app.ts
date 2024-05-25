@@ -1,11 +1,12 @@
 import express, { Request, Response } from 'express';
 import { ProductRoutes } from './app/modules/Products/product.router';
+import cors from 'cors'
 import { OrderRoutes } from './app/modules/Orders/order.router';
 const app = express();
 
 //parser 
 app.use(express.json())
-
+app.use(cors())
 
 
 app.use('/api/products', ProductRoutes)
