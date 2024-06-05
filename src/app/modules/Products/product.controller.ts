@@ -63,10 +63,18 @@ const getSingleProductById = async (req: Request, res: Response) => {
     const { productId } = req.params;
     const result = await productServices.getSingleProductById(productId);
 
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: 'Products fetched successfully',
+        data: result,
+      });
+    }
+
     res.status(200).json({
-      success: true,
-      message: 'Products fetched successfully',
-      data: result,
+      success: false,
+      message: 'Products does not exist',
+      data: null,
     });
   } catch (error) {
     res.status(500).json({
@@ -79,19 +87,25 @@ const getSingleProductById = async (req: Request, res: Response) => {
 
 const updateSingleProduct = async (req: Request, res: Response) => {
   try {
+    const { productId } = req.params;
     const { newProduct } = req.body;
     const zodParsedNewProduct = productValidationSchema.parse(newProduct);
-    const result =
-      await productServices.updateSingleProduct(zodParsedNewProduct);
-    res.status(200).json({
-      success: true,
-      message: 'Product updated successfully',
-      data: result,
-    });
-  } catch (error) {
+    const result = await productServices.updateSingleProduct(
+      productId,
+      zodParsedNewProduct,
+    );
+
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: 'Product updated successfully',
+        data: result,
+      });
+    }
+  } catch (error: any) {
     res.status(500).json({
       success: false,
-      message: 'something went wrong',
+      message: error.message || 'something went wrong',
       error,
     });
   }
@@ -101,19 +115,26 @@ const deleteSingleProduct = async (req: Request, res: Response) => {
   try {
     const { productId } = req.params;
     const result = await productServices.deleteSingleProduct(productId);
-    if (result.deletedCount > 0) {
+
+    if (!result) {
+      res.status(404).json({
+        success: false,
+        message: 'Already deleted',
+        data: null,
+      });
+    } else if (result.deletedCount > 0) {
       res.status(200).json({
         success: true,
         message: 'Product deleted successfully',
         data: null,
       });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'something went wrong , product not deleted',
+        data: null,
+      });
     }
-
-    res.status(500).json({
-      success: false,
-      message: 'something went wrong , product not deleted',
-      data: null,
-    });
   } catch (error) {
     res.status(500).json({
       success: false,

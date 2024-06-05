@@ -13,20 +13,25 @@ const getAllProduct = async () => {
 };
 
 const getSingleProductById = async (id: string) => {
-  const result = await Product.findById({ _id: id });
+  const result = await Product.findOne({ _id: id });
   return result;
 };
 const getProductBySlug = async (name: string) => {
   const result = await Product.find({ slug: name });
   return result;
 };
-const updateSingleProduct = async (newProduct: TProduct) => {
-  await Product.updateOne(newProduct);
-  if (typeof newProduct._id === 'string') {
-    const updated = await productServices.getSingleProductById(newProduct._id);
 
-    return updated;
-  }
+const updateSingleProduct = async (
+  productId: string,
+  newProduct: Partial<TProduct>,
+) => {
+  const { _id, ...updatedFields } = newProduct;
+  const updatedProduct = await Product.findOneAndUpdate(
+    { _id: productId },
+    updatedFields,
+    { new: true },
+  );
+  return updatedProduct;
 };
 
 const deleteSingleProduct = async (id: string) => {
